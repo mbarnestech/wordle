@@ -67,18 +67,18 @@ func TestNewGuess(t *testing.T) {
 }
 
 func TestUpdateLettersWithWord(t *testing.T) {
-	s := "HelOo"
+	s := "VIOLA"
 	g := newGuess(s)
 	secretword := "HELLO"
 	word := [wordSize]byte([]byte(secretword))
 	g.updateLettersWithWord(word)
 
 	statuses := []letterStatus{
-		correct, // "H" is not in "HELLO"
-		absent,  // "e" is not in "HELLO"
-		absent,  // "l" is in "HELLO" but not in the correct position
-		present, // "O" is in "HELLO" and in the correct position
-		absent,  // "o" is not in "HELLO"
+		absent,  // "V" is not in "HELLO"
+		absent,  // "I" is not in "HELLO"
+		present, // "O" is in "HELLO" but not in the correct position
+		correct, // "L" is in "HELLO" and in the correct position
+		absent,  // "A" is not in "HELLO"
 	}
 
 	for i, char := range g {
