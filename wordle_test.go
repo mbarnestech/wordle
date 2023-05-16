@@ -36,9 +36,8 @@ func statusToString(status letterStatus) string {
 }
 
 func TestNewGuess(t *testing.T) {
-	s := "Hello"
+	s := "HELLO"
 	g := newGuess(s)
-	fmt.Println(g)
 
 	if len(g) != wordSize {
 		t.Errorf("Expected length of guess to be %d, but got %d", wordSize, len(g))
@@ -96,7 +95,7 @@ func TestAppendGuess(t *testing.T) {
 
 	// checks for if the max guess has been reached
 	ws.currGuess = 6
-	ws.appendGuess(g)
+	fmt.Println(ws.appendGuess(g))
 
 	// reset currGuess
 	ws.currGuess = 1
@@ -104,11 +103,52 @@ func TestAppendGuess(t *testing.T) {
 	// check for length error
 	s = "hill"
 	g = newGuess(s)
-	ws.appendGuess(g)
+	fmt.Println(ws.appendGuess(g))
 
 	// check for invalid word error
-	s = "hgdle"
+	s1 := "hgdle"
+	g1 := newGuess(s1)
+	fmt.Println(ws.appendGuess(g1))
+
+	// check the guess array contains the new guess
+	s = "hello"
 	g = newGuess(s)
 	ws.appendGuess(g)
 
+	if ws.guesses[ws.currGuess-1] != g {
+		t.Errorf("Expected word to be: %s but got: %s", g.string(), ws.guesses[ws.currGuess-1].string())
+	}
+
+}
+
+func TestIsWordGuessed(t *testing.T) {
+	s := "hello"
+	g := newGuess(s)
+	ws := newWordleState("HELLO")
+	ws.appendGuess(g)
+
+	if !ws.isWordGuessed() {
+		t.Errorf("Expected ws.appendGuess(g) to be true")
+	}
+
+}
+
+func TestShouldEndGame(t *testing.T) {
+
+	s := "hello"
+	g := newGuess(s)
+	ws := newWordleState("HELLO")
+	ws.appendGuess(g)
+	if !ws.shouldEndGame() {
+		t.Errorf("Expected ws.shouldEndGame() to be true")
+	}
+
+	s1 := "VIOLA"
+	g1 := newGuess(s1)
+	ws1 := newWordleState("HELLO")
+	ws1.appendGuess(g1)
+	ws1.currGuess = 6
+	if !ws1.shouldEndGame() {
+		t.Errorf("Expected ws.shouldEndGame() to be true")
+	}
 }

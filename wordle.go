@@ -144,6 +144,23 @@ func (w *wordleState) appendGuess(g guess) error {
 		return errors.New("Sorry! This is not a valid word.")
 	}
 
+	w.guesses[w.currGuess] = g
+	w.currGuess += 1
+
 	return nil
 
+}
+
+// isWordGuessed returns true when the latest guess is the correct word
+func (w *wordleState) isWordGuessed() bool {
+	lg := w.guesses[w.currGuess-1].string()
+	wo := string(w.word[:])
+
+	return lg == wo
+}
+
+// The game should end when the latest guess is correct or when
+// there are no more empty slots left in the guesses array.
+func (w *wordleState) shouldEndGame() bool {
+	return w.currGuess == 6 || w.isWordGuessed()
 }
